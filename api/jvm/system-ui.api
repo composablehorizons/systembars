@@ -1,0 +1,33 @@
+public final class com/composables/systemui/SystemBarAppearance {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcom/composables/systemui/SystemBarIcons;Lcom/composables/systemui/SystemBarIcons;)V
+	public synthetic fun <init> (Lcom/composables/systemui/SystemBarIcons;Lcom/composables/systemui/SystemBarIcons;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNavigationBar ()Lcom/composables/systemui/SystemBarIcons;
+	public final fun getStatusBar ()Lcom/composables/systemui/SystemBarIcons;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/composables/systemui/SystemBarIcons : java/lang/Enum {
+	public static final field Dark Lcom/composables/systemui/SystemBarIcons;
+	public static final field Light Lcom/composables/systemui/SystemBarIcons;
+	public static final field Unspecified Lcom/composables/systemui/SystemBarIcons;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/composables/systemui/SystemBarIcons;
+	public static fun values ()[Lcom/composables/systemui/SystemBarIcons;
+}
+
+public final class com/composables/systemui/SystemBarsKt {
+	public static final fun ProvideSystemBars (Lcom/composables/systemui/SystemBarsState;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
+	public static final fun SystemBars (Lcom/composables/systemui/SystemBarIcons;Landroidx/compose/runtime/Composer;I)V
+	public static final fun SystemBars (Lcom/composables/systemui/SystemBarIcons;Lcom/composables/systemui/SystemBarIcons;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/composables/systemui/SystemBarsState {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun getAppearance ()Lcom/composables/systemui/SystemBarAppearance;
+}
+

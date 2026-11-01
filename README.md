@@ -25,7 +25,7 @@ Android requests share an owner per window. Closing an outgoing screen or modal 
 
 ## iOS host
 
-Host the app with the library's controller so UIKit can read the requested status-bar style:
+UIKit reads the status-bar style from a view controller. Host the app with the library's controller:
 
 ```kotlin
 import com.composables.systemui.SystemUiViewController
@@ -35,9 +35,37 @@ fun MainViewController() = SystemUiViewController {
 }
 ```
 
-Calling `SystemBars` on iOS without this host or an explicit `ProvideSystemUi` provider throws. iOS currently applies the status-bar appearance; it does not customize navigation-bar icons. JVM and Wasm implementations are no-ops because they have no native mobile system bars.
+To use your own controller instead, create its state with `SystemBarsState(this)`, return `statusBarStyle` and provide the state to Compose. The state updates the controller's status bar when requests change:
 
-`SystemUiState` and `ProvideSystemUi` optionally let a host observe appearance requests instead of applying them natively. Ordinary Android apps do not need that provider.
+```kotlin
+class AppViewController : UIViewController(null, null) {
+    private val systemBarsState = SystemBarsState(this)
+
+    override fun preferredStatusBarStyle() = systemBarsState.statusBarStyle
+
+    override fun viewDidLoad() {
+        super.viewDidLoad()
+        val compose = ComposeUIViewController {
+            ProvideSystemBars(systemBarsState) { App() }
+        }
+        // Add compose as a child view controller.
+    }
+}
+```
+
+Without either host, `SystemBars` has no effect on iOS and logs a warning once. iOS applies the status-bar appearance; it does not customize navigation-bar icons. JVM and Wasm implementations are no-ops because they have no native mobile system bars.
+
+## Custom hosts
+
+`ProvideSystemBars` sends requests to a `SystemBarsState` instead of the platform, so a host can draw or apply them itself, for example in previews or tests:
+
+```kotlin
+val systemBarsState = remember { SystemBarsState() }
+ProvideSystemBars(systemBarsState) {
+    App()
+}
+FakeStatusBar(icons = systemBarsState.appearance.statusBar)
+```
 
 ## Installation
 
@@ -62,7 +90,7 @@ kotlin {
 Use JDK 17, Xcode for iOS, and Android SDK platform 37. From this directory:
 
 ```sh
-./gradlew jvmTest testAndroidHostTest publishToMavenLocal
+./gradlew checkKotlinAbi jvmTest testAndroidHostTest iosSimulatorArm64Test publishToMavenLocal
 ```
 
 Standalone builds include Android, iOS arm64/simulator arm64, JVM, and Wasm.

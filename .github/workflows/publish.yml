@@ -53,7 +53,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           python3 .github/scripts/prepare-release.py
       - name: Verify tests and all platform publications
-        run: ./gradlew jvmTest testAndroidHostTest publishToMavenLocal --no-configuration-cache --console=plain
+        run: ./gradlew checkKotlinAbi jvmTest testAndroidHostTest iosSimulatorArm64Test publishToMavenLocal --no-configuration-cache --console=plain
       - name: Push release commit and tag
         run: |
           if ! git ls-remote --exit-code --tags origin "refs/tags/$RELEASE_REF"; then
