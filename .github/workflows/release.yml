@@ -1,0 +1,21 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Which part of the version to increase
+        required: true
+        type: choice
+        options: [patch, minor, major]
+
+jobs:
+  release:
+    uses: composablehorizons/.github/.github/workflows/library-release.yml@main
+    with:
+      bump: ${{ inputs.bump }}
+      test-command: jvmTest testAndroidHostTest iosSimulatorArm64Test
+      android-packages: 'platforms;android-37.0 build-tools;37.0.0'
+    permissions:
+      contents: write
+    secrets: inherit
