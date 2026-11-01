@@ -1,43 +1,77 @@
-# Compose System UI
+![An Android status bar over a vivid gradient that switches between orange and purple, with the clock, Wi-Fi and battery switching between dark and white to match](docs/hero.gif)
 
-Control system bar icon appearance from Compose Multiplatform.
+# Compose System Bars
+
+Set status bar and navigation bar icon colors from Compose Multiplatform. Each screen declares the icons it needs. The library applies them on Android and iOS, and brings back the previous ones when the screen leaves.
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.composables/systembars)](https://central.sonatype.com/artifact/com.composables/systembars)
+[![Verify](https://github.com/composablehorizons/systembars/actions/workflows/ci.yml/badge.svg)](https://github.com/composablehorizons/systembars/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+## Features
+
+- **Multiplatform.** Update the system bars on Android and iOS with the same API.
+- **Declarative.** A screen states the icons it needs. When it leaves composition, the previous request applies again.
+- **Overlays stack.** The most recent request wins, so a sheet, viewer or dialog can change the icons and hand them back when it closes, including during navigation transitions.
+- **Per-bar control.** Style both bars at once or each separately. A bar you leave unspecified keeps whatever is underneath.
+- **Dialogs use their own window** on Android, so icons set inside a dialog do not change the screen behind it.
+- **Preview and test friendly.** Collect requests into a state object and draw or check them yourself.
+
+## Installation
+
+Add the library to `commonMain`. It is published to Maven Central:
 
 ```kotlin
-import com.composables.systemui.SystemBarIcons
-import com.composables.systemui.SystemBars
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation("com.composables:systembars:1.0.0")
+        }
+    }
+}
+```
+
+## Quick start
+
+Make the status and navigation bar icons dark by passing `SystemBarContent.Dark` to the `SystemBars()` composable:
+
+```kotlin
+import com.composables.systembars.SystemBarContent
+import com.composables.systembars.SystemBars
 
 @Composable
-fun App() {
-    SystemBars(SystemBarIcons.Dark)
+fun HomeScreen() {
+    SystemBars(SystemBarContent.Dark)
     // Your UI
 }
 ```
 
-A single argument applies to both bars. Name the arguments to style the bars separately:
+`SystemBarContent` sets the color of everything drawn on a bar: its icons, text and handle. `Dark` is for light backgrounds behind the bar, `Light` is for dark ones.
+
+## iOS setup
+
+iOS does not let an app set the status bar icon color directly, the way Android does. Instead, UIKit asks the `UIViewController` on screen for its `preferredStatusBarStyle`. The library needs a reference to that view controller so it can update the icons. Without one, `SystemBars` has no effect on iOS.
+
+There are two ways to provide it:
+
+### Use the SystemBarsViewController
+
+If your app does not need its own view controller, host your Compose content in `SystemBarsViewController` instead of `ComposeUIViewController`:
 
 ```kotlin
-SystemBars(statusBar = SystemBarIcons.Light, navigationBar = SystemBarIcons.Dark)
-```
+import com.composables.systembars.SystemBarsViewController
 
-`Light` means light-colored icons; `Dark` means dark-colored icons. `Unspecified` has no opinion for that bar: the most recent request that specifies it wins, and when none does the platform setting stays as it is. On Android, `SystemBars` applies to the hosting Activity or dialog window and has no effect without one. The library makes the navigation bar transparent unless Android already enforces edge-to-edge (Android 15+ apps targeting API 35+), disables navigation-bar contrast enforcement where available, and restores previous settings when the effect leaves composition.
-
-Android requests share an owner per window. Closing an outgoing screen or modal keeps any remaining appearance request active; the original icon, navigation-bar color and contrast settings return after the last request leaves. Native dialogs use their own window.
-
-## iOS host
-
-UIKit reads the status-bar style from a view controller. Host the app with the library's controller:
-
-```kotlin
-import com.composables.systemui.SystemUiViewController
-
-fun MainViewController() = SystemUiViewController {
+fun MainViewController() = SystemBarsViewController {
     App()
 }
 ```
 
-To use your own controller instead, create its state with `SystemBarsState(this)`, return `statusBarStyle` and provide the state to Compose. The state updates the controller's status bar when requests change:
+### Use your own UIViewController
+
+If you already have a view controller, or another library provides one, create a `SystemBarsState` for it, return its `statusBarStyle` from `preferredStatusBarStyle()`, and provide the state to your Compose content. The state tells the controller to update whenever the requested icons change:
 
 ```kotlin
+@OptIn(ExperimentalForeignApi::class)
 class AppViewController : UIViewController(null, null) {
     private val systemBarsState = SystemBarsState(this)
 
@@ -48,16 +82,78 @@ class AppViewController : UIViewController(null, null) {
         val compose = ComposeUIViewController {
             ProvideSystemBars(systemBarsState) { App() }
         }
-        // Add compose as a child view controller.
+        addChildViewController(compose)
+        view.addSubview(compose.view)
+        compose.view.setFrame(view.bounds)
+        compose.view.autoresizingMask = UIViewAutoresizingFlexibleWidth or UIViewAutoresizingFlexibleHeight
+        compose.didMoveToParentViewController(this)
     }
 }
 ```
 
-Without either host, `SystemBars` has no effect on iOS and logs a warning once. iOS applies the status-bar appearance; it does not customize navigation-bar icons. JVM and Wasm implementations are no-ops because they have no native mobile system bars.
+## Examples
 
-## Custom hosts
+### Change the status bar icon color
 
-`ProvideSystemBars` sends requests to a `SystemBarsState` instead of the platform, so a host can draw or apply them itself, for example in previews or tests:
+Make the status bar icons white, for example over a dark header image, by passing `SystemBarContent.Light` as `statusBar`. The navigation bar stays as it is:
+
+```kotlin
+SystemBars(statusBar = SystemBarContent.Light)
+```
+
+### Change the navigation bar icon color
+
+Make the navigation bar icons dark, for example over a light bottom bar, by passing `SystemBarContent.Dark` as `navigationBar`. The status bar stays as it is:
+
+```kotlin
+SystemBars(navigationBar = SystemBarContent.Dark)
+```
+
+This only affects Android. On iOS, the home indicator adapts its color to the content behind it automatically.
+
+### Use different colors for the status and navigation bars
+
+Make the status bar icons white and the navigation bar icons dark by passing both to `SystemBars()`:
+
+```kotlin
+SystemBars(statusBar = SystemBarContent.Light, navigationBar = SystemBarContent.Dark)
+```
+
+### Change the icon colors for a specific screen
+
+Make the icons white only while a photo viewer is open, and dark again when it closes, by calling `SystemBars()` inside the viewer:
+
+```kotlin
+@Composable
+fun Gallery() {
+    SystemBars(SystemBarContent.Dark)
+    var viewing by remember { mutableStateOf<Photo?>(null) }
+
+    PhotoGrid(onClick = { viewing = it })
+
+    viewing?.let { photo ->
+        SystemBars(SystemBarContent.Light)
+        PhotoViewer(photo, onClose = { viewing = null })
+    }
+}
+```
+
+### Change the status bar icon color from an overlay
+
+Make only the status bar icons white while a dark banner is showing, and keep the screen's dark navigation bar icons, by leaving `navigationBar` unspecified in the banner. Each bar comes from the most recent request that specifies it:
+
+```kotlin
+SystemBars(SystemBarContent.Dark)                    // screen: both bars dark
+
+if (showBanner) {
+    SystemBars(statusBar = SystemBarContent.Light)   // overlay: status bar light, navigation bar stays dark
+    DarkBanner()
+}
+```
+
+### Show the system bars in previews and tests
+
+Draw mock system bars in previews, design tools or tests by wrapping your content in `ProvideSystemBars()` and reading the requested icons from its `SystemBarsState`. Nothing is applied to the platform inside it:
 
 ```kotlin
 val systemBarsState = remember { SystemBarsState() }
@@ -67,44 +163,15 @@ ProvideSystemBars(systemBarsState) {
 FakeStatusBar(icons = systemBarsState.appearance.statusBar)
 ```
 
-## Installation
+## How it behaves
 
-Add Maven Central to your dependency repositories and add the library to `commonMain`:
+- **`Unspecified`** means no preference for that bar. The most recent request that specifies the bar wins. If none does, the platform setting stays as it is.
+- **Android:** requests apply to the hosting Activity or dialog window. While any request is active, the navigation bar is transparent and its contrast scrim is off. When the last request leaves, the original icons, color and contrast return. On Android 15+, for apps targeting API 35+, the platform already draws edge to edge and ignores the navigation bar color, so the library leaves it alone.
+- **iOS:** only the status bar is styled. `navigationBar` has no effect, because iOS adapts the home indicator to the content automatically.
+- **Inside `ProvideSystemBars`**, nothing is applied to the platform on any target. The state is the only output.
 
-```kotlin
-repositories {
-    mavenCentral()
-}
+## Troubleshooting
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            implementation("com.composables:system-ui:1.1.1")
-        }
-    }
-}
-```
-
-## Build locally
-
-Use JDK 17, Xcode for iOS, and Android SDK platform 37. From this directory:
-
-```sh
-./gradlew checkKotlinAbi jvmTest testAndroidHostTest iosSimulatorArm64Test publishToMavenLocal
-```
-
-Standalone builds include Android, iOS arm64/simulator arm64, JVM, and Wasm.
-
-## Releasing
-
-Run **Release** in GitHub Actions and enter a version such as `0.1.1`. You can also dispatch it from the CLI:
-
-```sh
-gh workflow run publish.yml --ref main --field version=0.1.1
-```
-
-The workflow checks out `main`, updates `package.yml` using KPM, promotes `CHANGELOG.md`'s Unreleased notes to the requested version when needed, and updates the README dependency. It runs tests and builds all platform publications before pushing the release commit and tag. Then `kpm publish` publishes signed artifacts to Maven Central. No local versioning, tag management, or release PR is needed.
-
-You can write release notes under `## [Unreleased]`, or prepare a dated section for the requested version. When no notes are available, the workflow adds a link to the changes since the previous release tag. After upload succeeds, the workflow creates a draft GitHub release from those notes without waiting for Maven Central validation or download availability. Review and publish that draft separately. Dispatching an existing version retries publication from its original tag without creating another commit or changing the tag. Pushing a tag does not trigger publishing.
-
-Publishing uses the `maven-central` environment and the organization secrets `OSSRH_USERNAME`, `OSSRH_PASSWORD`, `SIGNING_KEY_ID`, `SIGNING_PASSWORD`, and `SIGNING_KEY`.
+- **Icons do not change on Android.** `SystemBars` needs an Activity or dialog window. Elsewhere, such as in a service overlay, it does nothing and logs a warning once. Previews skip the warning.
+- **Icons are invisible.** Choose the content for the background behind the bar, not for the system theme: `Light` on dark backgrounds, `Dark` on light ones.
+- **Icons do not change on iOS.** Host Compose with `SystemBarsViewController`, or create a `SystemBarsState(viewController)` and return its `statusBarStyle` from that controller. Without a host, `SystemBars` does nothing and logs a warning once.
