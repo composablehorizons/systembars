@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-01
+
 The library is now published as `com.composables:systembars` in the `com.composables.systembars` package. Earlier releases below were published as `com.composables:system-ui`.
 
 ### Added
