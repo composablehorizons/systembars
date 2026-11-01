@@ -14,6 +14,7 @@
 - `SystemBarAppearance` is a regular class instead of a data class.
 - `SystemBars` on iOS without a host has no effect and logs a warning instead of throwing.
 - `SystemBars` on Android without an Activity or dialog window, such as in Android Studio previews, has no effect instead of throwing.
+- Leave the deprecated navigation bar color alone where Android enforces edge-to-edge and ignores it.
 - `SystemBarsState.appearance` resolves each bar from the most recent request that specifies it, matching Android. An overlay that leaves a bar unspecified no longer resets it on iOS or in custom hosts.
 
 ## [1.1.1] - 2026-10-21

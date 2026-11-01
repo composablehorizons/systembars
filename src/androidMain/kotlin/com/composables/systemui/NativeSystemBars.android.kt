@@ -51,7 +51,11 @@ private class WindowSystemBars(private val window: Window) {
     private val controller = WindowCompat.getInsetsController(window, window.decorView)
     private val originalStatus = controller.isAppearanceLightStatusBars
     private val originalNavigation = controller.isAppearanceLightNavigationBars
-    private val originalNavigationColor = window.navigationBarColor
+    // Android 15 enforces edge-to-edge for apps targeting it and ignores the navigation bar color.
+    private val ownsNavigationColor =
+        Build.VERSION.SDK_INT < 35 || window.context.applicationInfo.targetSdkVersion < 35
+    @Suppress("DEPRECATION")
+    private val originalNavigationColor = if (ownsNavigationColor) window.navigationBarColor else Color.TRANSPARENT
     private val originalNavigationContrast =
         if (Build.VERSION.SDK_INT >= 29) window.isNavigationBarContrastEnforced else false
     private val requests = linkedMapOf<Any, SystemBarAppearance>()
@@ -68,7 +72,10 @@ private class WindowSystemBars(private val window: Window) {
     }
 
     private fun applyAppearance() {
-        window.navigationBarColor = if (isEmpty) originalNavigationColor else Color.TRANSPARENT
+        if (ownsNavigationColor) {
+            @Suppress("DEPRECATION")
+            window.navigationBarColor = if (isEmpty) originalNavigationColor else Color.TRANSPARENT
+        }
         if (Build.VERSION.SDK_INT >= 29) {
             window.isNavigationBarContrastEnforced = if (isEmpty) originalNavigationContrast else false
         }
