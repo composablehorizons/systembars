@@ -19,7 +19,7 @@ class NonActivitySystemBarsTest {
         val activity = Robolectric.buildActivity(ComponentActivity::class.java).setup().get()
         val view = ComposeView(activity.applicationContext)
         activity.setContentView(view)
-        view.setContent { SystemBars(SystemBarIcons.Dark) }
+        view.setContent { SystemBars(SystemBarContent.Dark) }
         shadowOf(Looper.getMainLooper()).idle()
         val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
         assertFalse(controller.isAppearanceLightStatusBars)

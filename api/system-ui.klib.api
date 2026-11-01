@@ -7,25 +7,25 @@
 // - Show declarations: true
 
 // Library unique name: <com.composables:system-ui>
-final enum class com.composables.systemui/SystemBarIcons : kotlin/Enum<com.composables.systemui/SystemBarIcons> { // com.composables.systemui/SystemBarIcons|null[0]
-    enum entry Dark // com.composables.systemui/SystemBarIcons.Dark|null[0]
-    enum entry Light // com.composables.systemui/SystemBarIcons.Light|null[0]
-    enum entry Unspecified // com.composables.systemui/SystemBarIcons.Unspecified|null[0]
+final enum class com.composables.systemui/SystemBarContent : kotlin/Enum<com.composables.systemui/SystemBarContent> { // com.composables.systemui/SystemBarContent|null[0]
+    enum entry Dark // com.composables.systemui/SystemBarContent.Dark|null[0]
+    enum entry Light // com.composables.systemui/SystemBarContent.Light|null[0]
+    enum entry Unspecified // com.composables.systemui/SystemBarContent.Unspecified|null[0]
 
-    final val entries // com.composables.systemui/SystemBarIcons.entries|#static{}entries[0]
-        final fun <get-entries>(): kotlin.enums/EnumEntries<com.composables.systemui/SystemBarIcons> // com.composables.systemui/SystemBarIcons.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val entries // com.composables.systemui/SystemBarContent.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.composables.systemui/SystemBarContent> // com.composables.systemui/SystemBarContent.entries.<get-entries>|<get-entries>#static(){}[0]
 
-    final fun valueOf(kotlin/String): com.composables.systemui/SystemBarIcons // com.composables.systemui/SystemBarIcons.valueOf|valueOf#static(kotlin.String){}[0]
-    final fun values(): kotlin/Array<com.composables.systemui/SystemBarIcons> // com.composables.systemui/SystemBarIcons.values|values#static(){}[0]
+    final fun valueOf(kotlin/String): com.composables.systemui/SystemBarContent // com.composables.systemui/SystemBarContent.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.composables.systemui/SystemBarContent> // com.composables.systemui/SystemBarContent.values|values#static(){}[0]
 }
 
 final class com.composables.systemui/SystemBarAppearance { // com.composables.systemui/SystemBarAppearance|null[0]
-    constructor <init>(com.composables.systemui/SystemBarIcons = ..., com.composables.systemui/SystemBarIcons = ...) // com.composables.systemui/SystemBarAppearance.<init>|<init>(com.composables.systemui.SystemBarIcons;com.composables.systemui.SystemBarIcons){}[0]
+    constructor <init>(com.composables.systemui/SystemBarContent = ..., com.composables.systemui/SystemBarContent = ...) // com.composables.systemui/SystemBarAppearance.<init>|<init>(com.composables.systemui.SystemBarContent;com.composables.systemui.SystemBarContent){}[0]
 
     final val navigationBar // com.composables.systemui/SystemBarAppearance.navigationBar|{}navigationBar[0]
-        final fun <get-navigationBar>(): com.composables.systemui/SystemBarIcons // com.composables.systemui/SystemBarAppearance.navigationBar.<get-navigationBar>|<get-navigationBar>(){}[0]
+        final fun <get-navigationBar>(): com.composables.systemui/SystemBarContent // com.composables.systemui/SystemBarAppearance.navigationBar.<get-navigationBar>|<get-navigationBar>(){}[0]
     final val statusBar // com.composables.systemui/SystemBarAppearance.statusBar|{}statusBar[0]
-        final fun <get-statusBar>(): com.composables.systemui/SystemBarIcons // com.composables.systemui/SystemBarAppearance.statusBar.<get-statusBar>|<get-statusBar>(){}[0]
+        final fun <get-statusBar>(): com.composables.systemui/SystemBarContent // com.composables.systemui/SystemBarAppearance.statusBar.<get-statusBar>|<get-statusBar>(){}[0]
 
     final fun equals(kotlin/Any?): kotlin/Boolean // com.composables.systemui/SystemBarAppearance.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // com.composables.systemui/SystemBarAppearance.hashCode|hashCode(){}[0]
@@ -43,8 +43,8 @@ final val com.composables.systemui/com_composables_systemui_SystemBarAppearance$
 final val com.composables.systemui/com_composables_systemui_SystemBarsState$stableprop // com.composables.systemui/com_composables_systemui_SystemBarsState$stableprop|#static{}com_composables_systemui_SystemBarsState$stableprop[0]
 
 final fun com.composables.systemui/ProvideSystemBars(com.composables.systemui/SystemBarsState, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer?, kotlin/Int) // com.composables.systemui/ProvideSystemBars|ProvideSystemBars(com.composables.systemui.SystemBarsState;kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
-final fun com.composables.systemui/SystemBars(com.composables.systemui/SystemBarIcons, androidx.compose.runtime/Composer?, kotlin/Int) // com.composables.systemui/SystemBars|SystemBars(com.composables.systemui.SystemBarIcons;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
-final fun com.composables.systemui/SystemBars(com.composables.systemui/SystemBarIcons?, com.composables.systemui/SystemBarIcons?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // com.composables.systemui/SystemBars|SystemBars(com.composables.systemui.SystemBarIcons?;com.composables.systemui.SystemBarIcons?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun com.composables.systemui/SystemBars(com.composables.systemui/SystemBarContent, androidx.compose.runtime/Composer?, kotlin/Int) // com.composables.systemui/SystemBars|SystemBars(com.composables.systemui.SystemBarContent;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun com.composables.systemui/SystemBars(com.composables.systemui/SystemBarContent?, com.composables.systemui/SystemBarContent?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // com.composables.systemui/SystemBars|SystemBars(com.composables.systemui.SystemBarContent?;com.composables.systemui.SystemBarContent?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun com.composables.systemui/com_composables_systemui_SystemBarAppearance$stableprop_getter(): kotlin/Int // com.composables.systemui/com_composables_systemui_SystemBarAppearance$stableprop_getter|com_composables_systemui_SystemBarAppearance$stableprop_getter(){}[0]
 final fun com.composables.systemui/com_composables_systemui_SystemBarsState$stableprop_getter(): kotlin/Int // com.composables.systemui/com_composables_systemui_SystemBarsState$stableprop_getter|com_composables_systemui_SystemBarsState$stableprop_getter(){}[0]
 

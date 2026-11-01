@@ -25,7 +25,7 @@ class EdgeToEdgeSystemBarsTest {
         controller.isAppearanceLightNavigationBars = false
         val view = ComposeView(activity)
         activity.setContentView(view)
-        view.setContent { SystemBars(SystemBarIcons.Dark) }
+        view.setContent { SystemBars(SystemBarContent.Dark) }
         shadowOf(Looper.getMainLooper()).idle()
         assertTrue(controller.isAppearanceLightStatusBars)
         assertTrue(controller.isAppearanceLightNavigationBars)

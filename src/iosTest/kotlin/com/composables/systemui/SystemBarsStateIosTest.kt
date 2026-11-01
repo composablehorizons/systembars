@@ -17,7 +17,7 @@ class SystemBarsStateIosTest {
         val state = SystemBarsState(controller)
         val screen = Any()
         assertEquals(UIStatusBarStyleDefault, state.statusBarStyle)
-        state.update(screen, SystemBarAppearance(SystemBarIcons.Dark))
+        state.update(screen, SystemBarAppearance(SystemBarContent.Dark))
         assertEquals(UIStatusBarStyleDarkContent, state.statusBarStyle)
         assertEquals(1, controller.updates)
         state.remove(screen)

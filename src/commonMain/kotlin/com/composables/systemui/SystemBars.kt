@@ -2,23 +2,23 @@ package com.composables.systemui
 
 import androidx.compose.runtime.*
 
-/** The color of the icons drawn in a system bar. */
-public enum class SystemBarIcons {
+/** The color of the content drawn on a system bar, such as its icons, text and handle. */
+public enum class SystemBarContent {
     /** No preference. The most recent request that specifies this bar wins, otherwise the platform setting stays. */
     Unspecified,
 
-    /** Light-colored icons, for dark content behind the bar. */
+    /** Light content, for dark backgrounds behind the bar. */
     Light,
 
-    /** Dark-colored icons, for light content behind the bar. */
+    /** Dark content, for light backgrounds behind the bar. */
     Dark,
 }
 
-/** The icon appearance requested for each system bar. */
+/** The content requested for each system bar. */
 @Immutable
 public class SystemBarAppearance(
-    public val statusBar: SystemBarIcons = SystemBarIcons.Unspecified,
-    public val navigationBar: SystemBarIcons = SystemBarIcons.Unspecified,
+    public val statusBar: SystemBarContent = SystemBarContent.Unspecified,
+    public val navigationBar: SystemBarContent = SystemBarContent.Unspecified,
 ) {
     override fun equals(other: Any?): Boolean =
         other is SystemBarAppearance && statusBar == other.statusBar && navigationBar == other.navigationBar
@@ -42,10 +42,10 @@ public class SystemBarsState {
     public val appearance: SystemBarAppearance
         get() = SystemBarAppearance(latest { it.statusBar }, latest { it.navigationBar })
 
-    private inline fun latest(bar: (SystemBarAppearance) -> SystemBarIcons): SystemBarIcons =
+    private inline fun latest(bar: (SystemBarAppearance) -> SystemBarContent): SystemBarContent =
         requests.asReversed().firstNotNullOfOrNull { (_, appearance) ->
-            bar(appearance).takeIf { it != SystemBarIcons.Unspecified }
-        } ?: SystemBarIcons.Unspecified
+            bar(appearance).takeIf { it != SystemBarContent.Unspecified }
+        } ?: SystemBarContent.Unspecified
 
     internal fun update(key: Any, appearance: SystemBarAppearance) = notifyingChanges {
         val index = requests.indexOfFirst { it.first === key }
@@ -70,21 +70,21 @@ public fun ProvideSystemBars(state: SystemBarsState, content: @Composable () -> 
     CompositionLocalProvider(LocalSystemBarsState provides state, content = content)
 }
 
-/** Requests the same icon appearance for the status and navigation bars while in composition. */
+/** Requests the same content for the status and navigation bars while in composition. */
 @Composable
-public fun SystemBars(all: SystemBarIcons) {
+public fun SystemBars(all: SystemBarContent) {
     SystemBars(statusBar = all, navigationBar = all)
 }
 
 /**
- * Requests system bar icon appearance while in composition.
+ * Requests system bar content while in composition.
  *
  * The most recent request wins for each bar it specifies. When it leaves composition, the previous request applies again.
  */
 @Composable
 public fun SystemBars(
-    statusBar: SystemBarIcons = SystemBarIcons.Unspecified,
-    navigationBar: SystemBarIcons = SystemBarIcons.Unspecified,
+    statusBar: SystemBarContent = SystemBarContent.Unspecified,
+    navigationBar: SystemBarContent = SystemBarContent.Unspecified,
 ) {
     val appearance = SystemBarAppearance(statusBar, navigationBar)
     val state = LocalSystemBarsState.current

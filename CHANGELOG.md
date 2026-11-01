@@ -4,12 +4,12 @@
 
 ### Added
 
-- `SystemBars(all)` applies the same icon appearance to the status and navigation bars.
+- `SystemBars(all)` applies the same content to the status and navigation bars.
 - `SystemBarsState(viewController)` and `SystemBarsState.statusBarStyle` let your own iOS view controller apply system bar requests.
 
 ### Changed
 
-- Rename `SystemBarIcons.Default` to `SystemBarIcons.Unspecified`.
+- Rename `SystemBarIcons` to `SystemBarContent`, and `SystemBarIcons.Default` to `SystemBarContent.Unspecified`.
 - Rename `SystemUiState` to `SystemBarsState` and `ProvideSystemUi` to `ProvideSystemBars`.
 - `SystemBarAppearance` is a regular class instead of a data class.
 - `SystemBars` on iOS without a host has no effect and logs a warning instead of throwing.

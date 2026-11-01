@@ -31,7 +31,7 @@ class NativeSystemBarsTest {
         compose.setContent {
             val view = LocalView.current
             SideEffect { activity = view.context.activity() }
-            SystemBars(SystemBarIcons.Dark)
+            SystemBars(SystemBarContent.Dark)
         }
         compose.runOnIdle {
             val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
@@ -42,13 +42,13 @@ class NativeSystemBarsTest {
 
     @Test fun closingLightOverrideRestoresDarkScreenIcons() {
         val showOverlay = mutableStateOf(false)
-        val screenIcons = mutableStateOf(SystemBarIcons.Dark)
+        val screenIcons = mutableStateOf(SystemBarContent.Dark)
         lateinit var activity: Activity
         compose.setContent {
             val view = LocalView.current
             SideEffect { activity = view.context.activity() }
             SystemBars(screenIcons.value, screenIcons.value)
-            if (showOverlay.value) SystemBars(SystemBarIcons.Light, SystemBarIcons.Light)
+            if (showOverlay.value) SystemBars(SystemBarContent.Light, SystemBarContent.Light)
         }
         fun assertDark(dark: Boolean) = compose.runOnIdle {
             val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
@@ -63,9 +63,9 @@ class NativeSystemBarsTest {
         assertDark(true)
         compose.runOnIdle { showOverlay.value = true }
         assertDark(false)
-        compose.runOnIdle { screenIcons.value = SystemBarIcons.Light }
+        compose.runOnIdle { screenIcons.value = SystemBarContent.Light }
         assertDark(false)
-        compose.runOnIdle { screenIcons.value = SystemBarIcons.Dark }
+        compose.runOnIdle { screenIcons.value = SystemBarContent.Dark }
         assertDark(false)
         compose.runOnIdle { showOverlay.value = false }
         assertDark(true)
@@ -78,8 +78,8 @@ class NativeSystemBarsTest {
         compose.setContent {
             val view = LocalView.current
             SideEffect { activity = view.context.activity() }
-            if (showOutgoing.value) SystemBars(SystemBarIcons.Dark, SystemBarIcons.Dark)
-            if (showCurrent.value) SystemBars(SystemBarIcons.Dark, SystemBarIcons.Dark)
+            if (showOutgoing.value) SystemBars(SystemBarContent.Dark, SystemBarContent.Dark)
+            if (showCurrent.value) SystemBars(SystemBarContent.Dark, SystemBarContent.Dark)
         }
         compose.runOnIdle {
             val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
@@ -115,12 +115,12 @@ class NativeSystemBarsTest {
         compose.setContent {
             val view = LocalView.current
             SideEffect { activity = view.context.activity() }
-            SystemBars(SystemBarIcons.Dark, SystemBarIcons.Dark)
+            SystemBars(SystemBarContent.Dark, SystemBarContent.Dark)
             if (showDialog.value) {
                 Dialog(onDismissRequest = { showDialog.value = false }) {
                     val dialogView = LocalView.current
                     SideEffect { dialogWindow = (dialogView.parent as DialogWindowProvider).window }
-                    SystemBars(SystemBarIcons.Light, SystemBarIcons.Light)
+                    SystemBars(SystemBarContent.Light, SystemBarContent.Light)
                 }
             }
         }
