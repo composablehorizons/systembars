@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.view.ViewParent
 import android.view.Window
@@ -13,18 +14,27 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.view.WindowCompat
 
 private val windowRequests = mutableMapOf<Window, WindowSystemBars>()
+private var warnedMissingWindow = false
 
 @Composable
 internal actual fun NativeSystemBars(appearance: SystemBarAppearance) {
     val view = LocalView.current
     // Reapply requests after configuration changes without changing their ownership order.
     LocalConfiguration.current
-    val window = requireNotNull(view.systemUiWindow()) { "SystemBars requires an Activity or dialog window" }
+    val window = view.systemUiWindow()
+    if (window == null) {
+        if (!warnedMissingWindow && !LocalInspectionMode.current) {
+            warnedMissingWindow = true
+            Log.w("SystemBars", "SystemBars has no effect: no Activity or dialog window hosts this composition.")
+        }
+        return
+    }
     val key = remember { Any() }
     DisposableEffect(window, key) {
         val requests = windowRequests.getOrPut(window) { WindowSystemBars(window) }
