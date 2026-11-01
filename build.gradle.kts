@@ -4,7 +4,7 @@ plugins {
     id("com.android.kotlin.multiplatform.library") version "9.2.0"
     alias(libs.plugins.jetbrains.kotlin.multiplatform)
     alias(libs.plugins.jetbrains.compose.compiler)
-    id("com.composables.kpm") version "0.1.0"
+    id("com.composables.kpm") version "0.6.0"
 }
 
 tasks.withType<Test>().configureEach {
