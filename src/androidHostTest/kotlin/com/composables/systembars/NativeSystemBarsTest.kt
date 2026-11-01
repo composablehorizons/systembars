@@ -1,4 +1,4 @@
-package com.composables.systemui
+package com.composables.systembars
 
 import android.app.Activity
 import android.content.Context

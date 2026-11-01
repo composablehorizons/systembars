@@ -1,4 +1,4 @@
-package com.composables.systemui
+package com.composables.systembars
 
 import androidx.compose.runtime.*
 
@@ -16,7 +16,7 @@ public enum class SystemBarContent {
 
 /** The content requested for each system bar. */
 @Immutable
-public class SystemBarAppearance(
+public class SystemBarAppearance internal constructor(
     public val statusBar: SystemBarContent = SystemBarContent.Unspecified,
     public val navigationBar: SystemBarContent = SystemBarContent.Unspecified,
 ) {

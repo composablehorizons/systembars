@@ -1,6 +1,6 @@
 @file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class, kotlin.experimental.ExperimentalNativeApi::class)
 
-package com.composables.systemui
+package com.composables.systembars
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.ComposeUIViewController
@@ -29,10 +29,10 @@ public val SystemBarsState.statusBarStyle: UIStatusBarStyle
     }
 
 /** Hosts [content] in a view controller that applies its [SystemBars] requests to the status bar. */
-public fun SystemUiViewController(content: @Composable () -> Unit): UIViewController =
-    SystemUiHostingController(content)
+public fun SystemBarsViewController(content: @Composable () -> Unit): UIViewController =
+    SystemBarsHostingController(content)
 
-private class SystemUiHostingController(private val content: @Composable () -> Unit) : UIViewController(null, null) {
+private class SystemBarsHostingController(private val content: @Composable () -> Unit) : UIViewController(null, null) {
     private val systemBarsState = SystemBarsState(this)
 
     override fun preferredStatusBarStyle(): UIStatusBarStyle = systemBarsState.statusBarStyle
@@ -54,6 +54,6 @@ private var warnedMissingHost = false
 internal actual fun NativeSystemBars(appearance: SystemBarAppearance) {
     if (!warnedMissingHost) {
         warnedMissingHost = true
-        NSLog("SystemBars has no effect: host Compose with SystemUiViewController or ProvideSystemBars(SystemBarsState(viewController)).")
+        NSLog("SystemBars has no effect: host Compose with SystemBarsViewController or ProvideSystemBars(SystemBarsState(viewController)).")
     }
 }

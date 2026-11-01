@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+The library is now published as `com.composables:systembars` in the `com.composables.systembars` package. Earlier releases below were published as `com.composables:system-ui`.
+
 ### Added
 
 - `SystemBars(all)` applies the same content to the status and navigation bars.
@@ -10,7 +12,7 @@
 ### Changed
 
 - Rename `SystemBarIcons` to `SystemBarContent`, and `SystemBarIcons.Default` to `SystemBarContent.Unspecified`.
-- Rename `SystemUiState` to `SystemBarsState` and `ProvideSystemUi` to `ProvideSystemBars`.
+- Rename `SystemUiState` to `SystemBarsState`, `ProvideSystemUi` to `ProvideSystemBars`, and `SystemUiViewController` to `SystemBarsViewController`.
 - `SystemBarAppearance` is a regular class instead of a data class.
 - `SystemBars` on iOS without a host has no effect and logs a warning instead of throwing.
 - `SystemBars` on Android without an Activity or dialog window, such as in Android Studio previews, has no effect instead of throwing.
@@ -19,7 +21,7 @@
 
 ## [1.1.1] - 2026-10-21
 
-- [Changes since v0.1.0](https://github.com/composablehorizons/system-ui/compare/v0.1.0...v1.1.1).
+- [Changes since v0.1.0](https://github.com/composablehorizons/systembars/compare/v0.1.0...v1.1.1).
 
 ## [0.1.1] - 2026-10-21
 

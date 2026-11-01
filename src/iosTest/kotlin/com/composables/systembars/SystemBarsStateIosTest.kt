@@ -1,4 +1,4 @@
-package com.composables.systemui
+package com.composables.systembars
 
 import platform.UIKit.UIStatusBarStyleDarkContent
 import platform.UIKit.UIStatusBarStyleDefault

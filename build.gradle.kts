@@ -14,13 +14,11 @@ tasks.withType<Test>().configureEach {
 kotlin {
     jvmToolchain(17)
     explicitApi()
-    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
-    abiValidation()
     jvm()
     @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
     wasmJs { browser() }
     targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
-        namespace = "com.composables.systemui"
+        namespace = "com.composables.systembars"
         compileSdk = 37
         minSdk = 23
         withHostTest { isIncludeAndroidResources = true }

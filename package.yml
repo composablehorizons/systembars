@@ -1,9 +1,9 @@
-name: Compose System UI
+name: Compose System Bars
 description: Control system bar appearance in Compose Multiplatform apps.
 groupId: com.composables
-artifactId: system-ui
-version: 1.1.1
-url: https://github.com/composablehorizons/system-ui
+artifactId: systembars
+version: 1.0.0
+url: https://github.com/composablehorizons/systembars
 licenses:
   - name: MIT License
     url: https://opensource.org/license/mit
@@ -14,9 +14,9 @@ developers:
     email: alex@composables.com
     url: https://composables.com
 scm:
-  connection: scm:git:https://github.com/composablehorizons/system-ui.git
-  developerConnection: scm:git:ssh://git@github.com/composablehorizons/system-ui.git
-  url: https://github.com/composablehorizons/system-ui
+  connection: scm:git:https://github.com/composablehorizons/systembars.git
+  developerConnection: scm:git:ssh://git@github.com/composablehorizons/systembars.git
+  url: https://github.com/composablehorizons/systembars
 issueManagement:
   system: GitHub Issues
-  url: https://github.com/composablehorizons/system-ui/issues
+  url: https://github.com/composablehorizons/systembars/issues

@@ -51,7 +51,7 @@ def main():
         if not notes:
             previous = run("git", "tag", "--merged", "HEAD", "--sort=-version:refname")
             tags = [item for item in previous.splitlines() if re.fullmatch(r"v\d+\.\d+\.\d+", item)]
-            repository = "https://github.com/composablehorizons/system-ui"
+            repository = "https://github.com/composablehorizons/systembars"
             if tags:
                 notes = f"- [Changes since {tags[0]}]({repository}/compare/{tags[0]}...{tag})."
             else:
@@ -62,7 +62,7 @@ def main():
 
     readme_path = Path("README.md")
     readme, count = re.subn(
-        r"(com\.composables:system-ui:)[^\s\"')]+",
+        r"(com\.composables:systembars:)[^\s\"')]+",
         lambda match: match.group(1) + version,
         readme_path.read_text(),
     )

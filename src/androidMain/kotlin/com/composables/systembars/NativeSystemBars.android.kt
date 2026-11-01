@@ -1,4 +1,4 @@
-package com.composables.systemui
+package com.composables.systembars
 
 import android.app.Activity
 import android.content.Context
@@ -27,7 +27,7 @@ internal actual fun NativeSystemBars(appearance: SystemBarAppearance) {
     val view = LocalView.current
     // Reapply requests after configuration changes without changing their ownership order.
     LocalConfiguration.current
-    val window = view.systemUiWindow()
+    val window = view.systemBarsWindow()
     if (window == null) {
         if (!warnedMissingWindow && !LocalInspectionMode.current) {
             warnedMissingWindow = true
@@ -94,7 +94,7 @@ private class WindowSystemBars(private val window: Window) {
     }
 }
 
-private fun View.systemUiWindow(): Window? {
+private fun View.systemBarsWindow(): Window? {
     if (this is DialogWindowProvider) return window
     var ancestor: ViewParent? = parent
     while (ancestor != null) {
