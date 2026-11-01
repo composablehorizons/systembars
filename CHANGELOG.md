@@ -11,12 +11,13 @@ The library is now published as `com.composables:systembars` in the `com.composa
 
 ### Changed
 
-- Rename `SystemBarIcons` to `SystemBarContent`, and `SystemBarIcons.Default` to `SystemBarContent.Unspecified`.
+- Rename `SystemBarIcons` to `SystemBarContent`, and `SystemBarIcons.Default` to `SystemBarContent.Unspecified`. `SystemBarContent` is a value class, so new values can be added without breaking callers.
 - Rename `SystemUiState` to `SystemBarsState`, `ProvideSystemUi` to `ProvideSystemBars`, and `SystemUiViewController` to `SystemBarsViewController`.
 - `SystemBarAppearance` is a regular class instead of a data class.
 - `SystemBars` on iOS without a host has no effect and logs a warning instead of throwing.
 - `SystemBars` on Android without an Activity or dialog window, such as in Android Studio previews, has no effect instead of throwing.
 - Leave the deprecated navigation bar color alone where Android enforces edge-to-edge and ignores it.
+- Leave the navigation bar untouched on Android 6 and 7, which cannot draw dark navigation buttons.
 - `SystemBarsState.appearance` resolves each bar from the most recent request that specifies it, matching Android. An overlay that leaves a bar unspecified no longer resets it on iOS or in custom hosts.
 
 ## [1.1.1] - 2026-10-21

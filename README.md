@@ -109,7 +109,7 @@ Make the navigation bar icons dark, for example over a light bottom bar, by pass
 SystemBars(navigationBar = SystemBarContent.Dark)
 ```
 
-This only affects Android. On iOS, the home indicator adapts its color to the content behind it automatically.
+This works on Android 8.0 (API 26) and later. Earlier versions always draw white navigation buttons, so the library leaves their navigation bar untouched. On iOS, the home indicator adapts its color to the content behind it automatically.
 
 ### Use different colors for the status and navigation bars
 
@@ -163,12 +163,10 @@ ProvideSystemBars(systemBarsState) {
 FakeStatusBar(icons = systemBarsState.appearance.statusBar)
 ```
 
-## How it behaves
+## Platform notes
 
-- **`Unspecified`** means no preference for that bar. The most recent request that specifies the bar wins. If none does, the platform setting stays as it is.
-- **Android:** requests apply to the hosting Activity or dialog window. While any request is active, the navigation bar is transparent and its contrast scrim is off. When the last request leaves, the original icons, color and contrast return. On Android 15+, for apps targeting API 35+, the platform already draws edge to edge and ignores the navigation bar color, so the library leaves it alone.
-- **iOS:** only the status bar is styled. `navigationBar` has no effect, because iOS adapts the home indicator to the content automatically.
-- **Inside `ProvideSystemBars`**, nothing is applied to the platform on any target. The state is the only output.
+- **Android:** requests apply to the hosting Activity or dialog window. On Android 8.0 and later, the navigation bar is transparent while a request is active. When the last request leaves, the original appearance returns.
+- **iOS:** only the status bar is styled. iOS updates the home indicator automatically.
 
 ## Troubleshooting
 
