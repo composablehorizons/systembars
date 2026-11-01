@@ -12,6 +12,7 @@ class SystemUiStateTest {
         val dark = SystemBarAppearance(SystemBarIcons.Dark)
         state.update(screen, light)
         state.update(overlay, dark)
+        assertEquals(SystemBarAppearance(SystemBarIcons.Dark, SystemBarIcons.Light), state.appearance)
         state.update(screen, SystemBarAppearance())
         assertEquals(dark, state.appearance)
         state.remove(overlay)

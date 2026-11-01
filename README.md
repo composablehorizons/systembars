@@ -8,15 +8,18 @@ import com.composables.systemui.SystemBars
 
 @Composable
 fun App() {
-    SystemBars(
-        statusBar = SystemBarIcons.Dark,
-        navigationBar = SystemBarIcons.Dark,
-    )
+    SystemBars(SystemBarIcons.Dark)
     // Your UI
 }
 ```
 
-`Light` means light-colored icons; `Dark` means dark-colored icons. `Default` leaves the native setting unchanged. On Android the composition must be hosted in an Activity. The library makes the navigation bar transparent, disables navigation-bar contrast enforcement where available, and restores previous settings when the effect leaves composition.
+A single argument applies to both bars. Name the arguments to style the bars separately:
+
+```kotlin
+SystemBars(statusBar = SystemBarIcons.Light, navigationBar = SystemBarIcons.Dark)
+```
+
+`Light` means light-colored icons; `Dark` means dark-colored icons. `Unspecified` has no opinion for that bar: the most recent request that specifies it wins, and when none does the platform setting stays as it is. On Android the composition must be hosted in an Activity. The library makes the navigation bar transparent, disables navigation-bar contrast enforcement where available, and restores previous settings when the effect leaves composition.
 
 Android requests share an owner per window. Closing an outgoing screen or modal keeps any remaining appearance request active; the original icon, navigation-bar color and contrast settings return after the last request leaves. Native dialogs use their own window.
 

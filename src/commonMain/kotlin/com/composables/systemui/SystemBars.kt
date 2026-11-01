@@ -2,17 +2,23 @@ package com.composables.systemui
 
 import androidx.compose.runtime.*
 
-enum class SystemBarIcons { Default, Light, Dark }
+enum class SystemBarIcons { Unspecified, Light, Dark }
 
 data class SystemBarAppearance(
-    val statusBar: SystemBarIcons = SystemBarIcons.Default,
-    val navigationBar: SystemBarIcons = SystemBarIcons.Default,
+    val statusBar: SystemBarIcons = SystemBarIcons.Unspecified,
+    val navigationBar: SystemBarIcons = SystemBarIcons.Unspecified,
 )
 
 @Stable
 class SystemUiState {
     private val requests = mutableStateListOf<Pair<Any, SystemBarAppearance>>()
-    val appearance: SystemBarAppearance get() = requests.lastOrNull()?.second ?: SystemBarAppearance()
+    val appearance: SystemBarAppearance
+        get() = SystemBarAppearance(latest { it.statusBar }, latest { it.navigationBar })
+
+    private inline fun latest(bar: (SystemBarAppearance) -> SystemBarIcons): SystemBarIcons =
+        requests.asReversed().firstNotNullOfOrNull { (_, appearance) ->
+            bar(appearance).takeIf { it != SystemBarIcons.Unspecified }
+        } ?: SystemBarIcons.Unspecified
 
     internal fun update(key: Any, appearance: SystemBarAppearance) {
         val index = requests.indexOfFirst { it.first === key }
@@ -31,9 +37,14 @@ fun ProvideSystemUi(state: SystemUiState, content: @Composable () -> Unit) {
 }
 
 @Composable
+fun SystemBars(all: SystemBarIcons) {
+    SystemBars(statusBar = all, navigationBar = all)
+}
+
+@Composable
 fun SystemBars(
-    statusBar: SystemBarIcons = SystemBarIcons.Default,
-    navigationBar: SystemBarIcons = SystemBarIcons.Default,
+    statusBar: SystemBarIcons = SystemBarIcons.Unspecified,
+    navigationBar: SystemBarIcons = SystemBarIcons.Unspecified,
 ) {
     val appearance = SystemBarAppearance(statusBar, navigationBar)
     val state = LocalSystemUi.current

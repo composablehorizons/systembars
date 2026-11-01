@@ -31,9 +31,9 @@ private class SystemUiHostingController(private val content: @Composable () -> U
         child.didMoveToParentViewController(this)
     }
 
-    private var statusBarIcons = SystemBarIcons.Default
+    private var statusBarIcons = SystemBarIcons.Unspecified
     override fun preferredStatusBarStyle(): UIStatusBarStyle = when (statusBarIcons) {
-        SystemBarIcons.Default -> UIStatusBarStyleDefault
+        SystemBarIcons.Unspecified -> UIStatusBarStyleDefault
         SystemBarIcons.Light -> UIStatusBarStyleLightContent
         SystemBarIcons.Dark -> UIStatusBarStyleDarkContent
     }

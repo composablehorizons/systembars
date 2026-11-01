@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Added
+
+- `SystemBars(all)` applies the same icon appearance to the status and navigation bars.
+
+### Changed
+
+- Rename `SystemBarIcons.Default` to `SystemBarIcons.Unspecified`.
+- `SystemUiState.appearance` resolves each bar from the most recent request that specifies it, matching Android. An overlay that leaves a bar unspecified no longer resets it on iOS or in custom hosts.
+
 ## [1.1.1] - 2026-10-21
 
 - [Changes since v0.1.0](https://github.com/composablehorizons/system-ui/compare/v0.1.0...v1.1.1).

@@ -26,6 +26,20 @@ import kotlin.test.assertTrue
 class NativeSystemBarsTest {
     @get:Rule val compose = createComposeRule()
 
+    @Test fun singleArgumentAppliesToBothBars() {
+        lateinit var activity: Activity
+        compose.setContent {
+            val view = LocalView.current
+            SideEffect { activity = view.context.activity() }
+            SystemBars(SystemBarIcons.Dark)
+        }
+        compose.runOnIdle {
+            val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
+            assertTrue(controller.isAppearanceLightStatusBars)
+            assertTrue(controller.isAppearanceLightNavigationBars)
+        }
+    }
+
     @Test fun closingLightOverrideRestoresDarkScreenIcons() {
         val showOverlay = mutableStateOf(false)
         val screenIcons = mutableStateOf(SystemBarIcons.Dark)

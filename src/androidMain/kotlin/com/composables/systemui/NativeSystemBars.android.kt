@@ -62,8 +62,8 @@ private class WindowSystemBars(private val window: Window) {
         if (Build.VERSION.SDK_INT >= 29) {
             window.isNavigationBarContrastEnforced = if (isEmpty) originalNavigationContrast else false
         }
-        val status = requests.values.lastOrNull { it.statusBar != SystemBarIcons.Default }?.statusBar
-        val navigation = requests.values.lastOrNull { it.navigationBar != SystemBarIcons.Default }?.navigationBar
+        val status = requests.values.lastOrNull { it.statusBar != SystemBarIcons.Unspecified }?.statusBar
+        val navigation = requests.values.lastOrNull { it.navigationBar != SystemBarIcons.Unspecified }?.navigationBar
         controller.isAppearanceLightStatusBars = when (status) {
             SystemBarIcons.Dark -> true
             SystemBarIcons.Light -> false
