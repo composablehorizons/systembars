@@ -51,9 +51,11 @@ private class WindowSystemBars(private val window: Window) {
     private val controller = WindowCompat.getInsetsController(window, window.decorView)
     private val originalStatus = controller.isAppearanceLightStatusBars
     private val originalNavigation = controller.isAppearanceLightNavigationBars
+    // Navigation buttons can only be dark from Android 8, so leave the navigation bar alone before that.
+    private val ownsNavigationBar = Build.VERSION.SDK_INT >= 26
     // Android 15 enforces edge-to-edge for apps targeting it and ignores the navigation bar color.
-    private val ownsNavigationColor =
-        Build.VERSION.SDK_INT < 35 || window.context.applicationInfo.targetSdkVersion < 35
+    private val ownsNavigationColor = ownsNavigationBar &&
+        (Build.VERSION.SDK_INT < 35 || window.context.applicationInfo.targetSdkVersion < 35)
     @Suppress("DEPRECATION")
     private val originalNavigationColor = if (ownsNavigationColor) window.navigationBarColor else Color.TRANSPARENT
     private val originalNavigationContrast =
@@ -86,10 +88,12 @@ private class WindowSystemBars(private val window: Window) {
             SystemBarContent.Light -> false
             else -> originalStatus
         }
-        controller.isAppearanceLightNavigationBars = when (navigation) {
-            SystemBarContent.Dark -> true
-            SystemBarContent.Light -> false
-            else -> originalNavigation
+        if (ownsNavigationBar) {
+            controller.isAppearanceLightNavigationBars = when (navigation) {
+                SystemBarContent.Dark -> true
+                SystemBarContent.Light -> false
+                else -> originalNavigation
+            }
         }
     }
 }

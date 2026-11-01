@@ -1,17 +1,27 @@
 package com.composables.systembars
 
 import androidx.compose.runtime.*
+import kotlin.jvm.JvmInline
 
 /** The color of the content drawn on a system bar, such as its icons, text and handle. */
-public enum class SystemBarContent {
-    /** No preference. The most recent request that specifies this bar wins, otherwise the platform setting stays. */
-    Unspecified,
+@JvmInline
+public value class SystemBarContent internal constructor(internal val value: Int) {
+    override fun toString(): String = when (this) {
+        Light -> "Light"
+        Dark -> "Dark"
+        else -> "Unspecified"
+    }
 
-    /** Light content, for dark backgrounds behind the bar. */
-    Light,
+    public companion object {
+        /** No preference. The most recent request that specifies this bar wins, otherwise the platform setting stays. */
+        public val Unspecified: SystemBarContent = SystemBarContent(0)
 
-    /** Dark content, for light backgrounds behind the bar. */
-    Dark,
+        /** Light content, for dark backgrounds behind the bar. */
+        public val Light: SystemBarContent = SystemBarContent(1)
+
+        /** Dark content, for light backgrounds behind the bar. */
+        public val Dark: SystemBarContent = SystemBarContent(2)
+    }
 }
 
 /** The content requested for each system bar. */

@@ -23,9 +23,9 @@ public fun SystemBarsState(viewController: UIViewController): SystemBarsState {
 /** The UIKit status bar style for the requested [SystemBarsState.appearance]. */
 public val SystemBarsState.statusBarStyle: UIStatusBarStyle
     get() = when (appearance.statusBar) {
-        SystemBarContent.Unspecified -> UIStatusBarStyleDefault
         SystemBarContent.Light -> UIStatusBarStyleLightContent
         SystemBarContent.Dark -> UIStatusBarStyleDarkContent
+        else -> UIStatusBarStyleDefault
     }
 
 /** Hosts [content] in a view controller that applies its [SystemBars] requests to the status bar. */
